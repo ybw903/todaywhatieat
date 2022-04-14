@@ -1,38 +1,99 @@
 .App {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.Intro {
+  position: absolute;
+  height: 100%;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  z-index: -1;
+  animation: easeOut 2s;
+}
+
+.Select {
+  position: absolute;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 999;
+  animation: easeIn 4s;
+}
+
+.SelectList {
+  padding: 30px;
+}
+
+.SelectElement {
+  margin: 20px;
+  padding: 20px;
+  font-weight: 700;
+  background-color: #eeeeee;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  border-style: none;
+  display: block;
+}
+
+.CategoryList {
+  display: flex;
+  flex-direction: column;
+}
+
+.CategoryElement {
+  text-align: center;
+  padding: 10px;
+}
+.SelectedCategory {
+  background: #eeeeee;
+  border-radius: 10px;
+
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.MoreSelectButton {
+  background-color: #0078d4;
+  margin-top: 20px;
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.Title {
+  font-size: 32px;
+  font-weight: 700;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
+@keyframes easeOut {
   from {
-    transform: rotate(0deg);
+    opacity: 100%;
+    z-index: 999;
   }
   to {
-    transform: rotate(360deg);
+    opacity: 0%;
+    z-index: -1;
+  }
+}
+
+@keyframes easeIn {
+  from {
+    opacity: 0%;
+    z-index: -1;
+  }
+  50% {
+    opacity: 0%;
+    z-index: -1;
+  }
+  to {
+    opacity: 100%;
+    z-index: 999;
   }
 }
