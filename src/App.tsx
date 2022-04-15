@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import useRoulette from "./hooks/useRoullete";
 import useScript from "./hooks/useScript";
@@ -208,20 +208,191 @@ const CategoryList = ({ callback }: ICategoryList) => {
 
 interface ICloseDistanceyList extends VoidCallbackProps {}
 
+const Map = ({ selectedPlace }: { selectedPlace: any }) => {
+  const mapRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (mapRef.current && selectedPlace) {
+      const latlng = new (window as any).kakao.maps.LatLng(
+        selectedPlace.y,
+        selectedPlace.x
+      );
+
+      const options = {
+        center: latlng,
+        level: 2,
+      };
+      const map = new (window as any).kakao.maps.Map(mapRef.current, options);
+      map.relayout();
+      map.setCenter(latlng);
+
+      const marker = new (window as any).kakao.maps.Marker({
+        position: new (window as any).kakao.maps.LatLng(
+          selectedPlace.y,
+          selectedPlace.x
+        ),
+      });
+
+      marker.setMap(map);
+
+      const content = `<div style="padding:5px;font-size:12px;">  ${selectedPlace.place_name} </div>`;
+      const infowindow = new (window as any).kakao.maps.InfoWindow({
+        content: content,
+      });
+
+      infowindow.open(map, marker);
+
+      const zoomControl = new (window as any).kakao.maps.ZoomControl();
+      map.addControl(
+        zoomControl,
+        (window as any).kakao.maps.ControlPosition.RIGHT
+      );
+    }
+  }, [selectedPlace]);
+
+  return (
+    <div className="MapWrapper">
+      <div ref={mapRef} className="Map"></div>
+    </div>
+  );
+};
+
+const MapContainer = ({
+  list,
+  initCallback,
+}: {
+  list: any[];
+  initCallback: () => void;
+}) => {
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  useEffect(() => {
+    if (list.length > 0) {
+      const shuffledList = shuffle(list);
+      const curSelectedPlace = shuffledList.at(shuffledList.length / 2);
+      setSelectedPlace(curSelectedPlace);
+    }
+  }, [list]);
+  return (
+    <div className="MapContainer">
+      {list.length > 0 ? (
+        <div>
+          <Map selectedPlace={selectedPlace} />
+          <div
+            className="MoreSelectButton"
+            onClick={() => {
+              initCallback();
+            }}
+          >
+            이전화면
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  );
+};
+
+const SearchList = ({
+  distance,
+  lat,
+  lng,
+  initCallback,
+}: {
+  distance: number;
+  lat: number;
+  lng: number;
+  initCallback: () => void;
+}) => {
+  const [searchResults, setSearchResults] = useState<[]>([]);
+  useEffect(() => {
+    const places = new (window as any).kakao.maps.services.Places();
+
+    const callback = (result: any, status: any) => {
+      if (status === (window as any).kakao.maps.services.Status.OK) {
+        setSearchResults(result);
+      }
+    };
+    places.keywordSearch("식당", callback, {
+      location: new (window as any).kakao.maps.LatLng(lat, lng),
+      radius: distance,
+    });
+  }, []);
+  return <MapContainer list={searchResults} initCallback={initCallback} />;
+};
+
+const DistacneList = ({
+  distance,
+  initCallback,
+}: {
+  distance: number;
+  initCallback: () => void;
+}) => {
+  const [lat, setLat] = useState(987654321);
+  const [lng, setLng] = useState(987654321);
+  useEffect(() => {
+    navigator?.geolocation.getCurrentPosition((position) => {
+      setLat(position.coords.latitude);
+      setLng(position.coords.longitude);
+    });
+  });
+
+  return lat === 987654321 && lng === 987654321 ? (
+    <div>gps 문제 있어</div>
+  ) : (
+    <SearchList
+      distance={distance}
+      lat={lat}
+      lng={lng}
+      initCallback={initCallback}
+    />
+  );
+};
+
 const CloseDistanceyList = ({ callback }: ICloseDistanceyList) => {
+  const [distance, setDistance] = useState(0);
+  const [isSelected, setIsSelected] = useState(false);
+
+  const curInitCallback = () => {
+    setDistance(0);
+    setIsSelected(false);
+  };
+
   const firstScreenButtonClickHandler: React.MouseEventHandler<
     HTMLDivElement
   > = (evt) => {
+    curInitCallback();
     callback();
   };
-  return (
-    <div>
-      <div>500m</div>
-      <div>1km</div>
+
+  const clickHandler = (distance: number) => {
+    setDistance(distance);
+    setIsSelected(true);
+  };
+  return isSelected === false ? (
+    <div className="SelectList">
+      <div
+        className="SelectElement"
+        onClick={() => {
+          clickHandler(500);
+        }}
+      >
+        500m
+      </div>
+      <div
+        className="SelectElement"
+        onClick={() => {
+          clickHandler(1000);
+        }}
+      >
+        1km
+      </div>
       <div className="MoreSelectButton" onClick={firstScreenButtonClickHandler}>
         첨 화면 ㄱ
       </div>
     </div>
+  ) : (
+    <DistacneList distance={distance} initCallback={curInitCallback} />
   );
 };
 
