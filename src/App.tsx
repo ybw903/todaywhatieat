@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import apiKey from "./apiKey";
 import "./App.css";
 import useRoulette from "./hooks/useRoullete";
 import useScript from "./hooks/useScript";
@@ -125,7 +124,14 @@ const MenuList = ({ callback }: ICategoryList) => {
       <div className="CategoryElement">{nextSelectedItem}</div>
       {isMoreButtonHide === false ? (
         <div>
-          <div className="MoreSelectButton">다시 ㄱ</div>
+          <div
+            className="MoreSelectButton"
+            onClick={() => {
+              initCallback();
+            }}
+          >
+            다시 ㄱ
+          </div>
           <div
             className="MoreSelectButton"
             onClick={firstScreenButtonClickHandler}
@@ -280,9 +286,6 @@ const Select = () => {
 };
 
 function App() {
-  useScript(
-    `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&libraries=services,clusterer,drawing`
-  );
   return (
     <div className="App">
       <Intro />
