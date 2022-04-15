@@ -1,46 +1,13 @@
-# Getting Started with Create React App
+# 오늘 뭐 먹지
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![고민중](./image/unnamed.jpg)
 
-## Available Scripts
+`오늘 뭐 먹지`는 쉽게 점심 메뉴를 고르지 못한 여러분들을 위해 점심 메뉴를 추천 해주는 프로그램입니다!!
 
-In the project directory, you can run:
+강력한 `Fisher-Yates` 알고리즘 방식으로 빅데이터로 쌓인 수 많은 메뉴 중 완전 무작위 랜덤 추첨을 통해 고민에 빠진 여러분들을 도와줄 것입니다!!
 
-### `npm start`
+차후 이 방식과 더불어 여러분들에게 강력한 인공지능 시스템으로 맞춤 추천을 지원해줄 예정입니다!!
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<h2>고민은 점심 시간을 늦출 뿐....</h2>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+<h1>빨리 먹고 푹 쉬자!</h1>
