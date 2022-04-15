@@ -47,6 +47,7 @@ export const koreanFoods = [
   "미역국",
   "북엇국",
   "갈비탕",
+  "칼국수",
   "감자탕",
   "낙곱새",
   "곰탕",
@@ -91,7 +92,19 @@ export const japaneseFood = [
   "함박스테이크",
 ];
 
-export const westernFood = ["파스타", "리조또", "스테이크"];
+export const westernFood = [
+  "명란크림파스타",
+  "까르보나라",
+  "볼로네제 파스타",
+  "아마트리아치나 파스타",
+  "아라비아타 파스타",
+  "봉골레 파스타",
+  "로제 파스타",
+  "리조또",
+  "스테이크",
+  "햄버거",
+  "샌드위치",
+];
 
 export const chineseFood = [
   "짜장면",
