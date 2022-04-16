@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { ISelectedScreen } from "./@interface";
 import "./App.css";
+import Ladder from "./components/Ladder";
 import useRoulette from "./hooks/useRoullete";
 import useScript from "./hooks/useScript";
 import {
@@ -24,6 +26,7 @@ enum SelectType {
   CATEGORY = "CATEGORY",
   CLOSE_DISTANCE = "CLOSE_DISTANCE",
   NONE = "NONE",
+  LADDER = "LADDER",
 }
 
 const categoryResolver = (category: string) => {
@@ -86,7 +89,7 @@ const MoreList = ({ category, changeCategoryToNone }: IMoreListProps) => {
   );
 };
 
-const MenuList = ({ callback }: ICategoryList) => {
+const MenuList = ({ callback }: ISelectedScreen) => {
   const [isMoreButtonHide, setIsMoreButtonHide] = useState(true);
   const { prevSelectedItem, selectedItem, nextSelectedItem, counterInit } =
     useRoulette({
@@ -144,9 +147,7 @@ const MenuList = ({ callback }: ICategoryList) => {
   );
 };
 
-interface ICategoryList extends VoidCallbackProps {}
-
-const CategoryList = ({ callback }: ICategoryList) => {
+const CategoryList = ({ callback }: ISelectedScreen) => {
   const [isMoreButtonHide, setIsMoreButtonHide] = useState(true);
   const [isMoreButtonClicked, setIsMoreButtonClicked] = useState(false);
   const { prevSelectedItem, selectedItem, nextSelectedItem, counterInit } =
@@ -205,8 +206,6 @@ const CategoryList = ({ callback }: ICategoryList) => {
     <MoreList category={selectedItem} changeCategoryToNone={initCallback} />
   );
 };
-
-interface ICloseDistanceyList extends VoidCallbackProps {}
 
 const Map = ({ selectedPlace }: { selectedPlace: any }) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -349,7 +348,7 @@ const DistacneList = ({
   );
 };
 
-const CloseDistanceyList = ({ callback }: ICloseDistanceyList) => {
+const CloseDistanceyList = ({ callback }: ISelectedScreen) => {
   const [distance, setDistance] = useState(0);
   const [isSelected, setIsSelected] = useState(false);
 
@@ -396,10 +395,6 @@ const CloseDistanceyList = ({ callback }: ICloseDistanceyList) => {
   );
 };
 
-interface VoidCallbackProps {
-  callback: () => void;
-}
-
 const Select = () => {
   const [isSelected, setIsSelected] = useState<SelectType>(SelectType.NONE);
 
@@ -440,11 +435,12 @@ const Select = () => {
 
   const selectAndSelect = ({
     callback: callbackSelectInit,
-  }: VoidCallbackProps) => {
+  }: ISelectedScreen) => {
     if (isSelected === SelectType.CATEGORY)
       return <CategoryList callback={callbackSelectInit} />;
     if (isSelected === SelectType.MENU)
       return <MenuList callback={callbackSelectInit}></MenuList>;
+    if (isSelected === SelectType.LADDER) return <Ladder></Ladder>;
     return <CloseDistanceyList callback={callbackSelectInit} />;
   };
   return (
