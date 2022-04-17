@@ -413,6 +413,10 @@ const Select = () => {
     setIsSelected(() => SelectType.CLOSE_DISTANCE);
   };
 
+  const ladderClickHandler: React.MouseEventHandler<HTMLDivElement> = (evt) => {
+    setIsSelected(() => SelectType.LADDER);
+  };
+
   const callbackSelectInit = () => {
     setIsSelected(() => SelectType.NONE);
   };
@@ -429,6 +433,9 @@ const Select = () => {
         <div className="SelectElement" onClick={closeDistanceClickHandler}>
           인근 거리 추천
         </div>
+        <div className="SelectElement" onClick={ladderClickHandler}>
+          음식값 사다리타기
+        </div>
       </div>
     );
   };
@@ -440,7 +447,8 @@ const Select = () => {
       return <CategoryList callback={callbackSelectInit} />;
     if (isSelected === SelectType.MENU)
       return <MenuList callback={callbackSelectInit}></MenuList>;
-    if (isSelected === SelectType.LADDER) return <Ladder></Ladder>;
+    if (isSelected === SelectType.LADDER)
+      return <Ladder callback={callbackSelectInit}></Ladder>;
     return <CloseDistanceyList callback={callbackSelectInit} />;
   };
   return (
