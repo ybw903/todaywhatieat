@@ -225,3 +225,12 @@
   background-color: #ffffff;
   color: #000000;
 }
+
+.KakaoBtn {
+  position: absolute;
+  bottom: 30px;
+  padding: 10px;
+  background-color: #ffe812;
+  border-radius: 20px;
+  font-weight: 600;
+}
