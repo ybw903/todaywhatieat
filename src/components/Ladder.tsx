@@ -2,10 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { ISelectedScreen } from "../@interface";
 import "../App.css";
 
+interface Result {
+  result: boolean;
+  isShow: boolean;
+}
+
 const Ladder = ({ callback }: ISelectedScreen) => {
   const [count, setCount] = useState(4);
   const [ladder, setLadder] = useState<number[][] | null>(null);
   const [playerIdx, setPlayerIdx] = useState(-1);
+  const [results, setResults] = useState<Result[]>([]);
   const ref = useRef<HTMLCanvasElement | null>(null);
   const firstScreenButtonClickHandler: React.MouseEventHandler<
     HTMLDivElement
@@ -110,6 +116,12 @@ const Ladder = ({ callback }: ISelectedScreen) => {
     const nowLadder = initLadder();
     setLadder(nowLadder);
     drawCanvas(nowLadder);
+    const results = Array.from({ length: count }, (_, i) => {
+      return { result: false, isShow: false };
+    });
+    const randIdx = Math.floor(Math.random() * count);
+    results[randIdx] = { ...results[randIdx], result: true };
+    setResults(() => results);
     return clearCanvas;
   }, [count]);
 
@@ -131,6 +143,8 @@ const Ladder = ({ callback }: ISelectedScreen) => {
     if (!context || playerIdx === -1) return;
     clearCanvas();
     drawCanvas(ladder);
+    const nextResults = [...results];
+    setResults(() => nextResults.map((nr, i) => ({ ...nr, isShow: true })));
     const arr: any[] = [];
     for (let i = 0; i < count; i++) {
       const startPosX = (i / count) * 300 + ((1 / count) * 300) / 2;
@@ -197,6 +211,21 @@ const Ladder = ({ callback }: ISelectedScreen) => {
       );
     });
   };
+
+  const renderResults = () => {
+    return results.map((r, i) => {
+      return (
+        <div
+          className={`ResultElement ${r.result === true ? "Target" : ""} ${
+            r.isShow === false ? "Hide" : ""
+          }`}
+          key={i}
+        >
+          {r.isShow === false ? "뭘까" : r.result === true ? "당첨" : "꽁짜"}
+        </div>
+      );
+    });
+  };
   return (
     <div className="LadderWrapper">
       <div className="CountWrapper">
@@ -212,9 +241,11 @@ const Ladder = ({ callback }: ISelectedScreen) => {
           </div>
         </div>
       </div>
+      <div></div>
       <div className={`PlayerWrapper-${count}`}>{renderPlayer()}</div>
 
       <canvas ref={ref} height={400} width={300}></canvas>
+      <div className={`PlayerWrapper-${count}`}>{renderResults()}</div>
       <div className="MoreSelectButton" onClick={firstScreenButtonClickHandler}>
         첨화면 ㄱ
       </div>

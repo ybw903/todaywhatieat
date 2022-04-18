@@ -131,6 +131,7 @@
 .CountWrapper {
   display: flex;
   flex-direction: row;
+  margin: 10px;
 }
 
 .CountElement {
@@ -143,8 +144,8 @@
 .CountButton {
   font-weight: 600;
   font-size: 17px;
-  height: 30px;
-  width: 30px;
+  height: 24px;
+  width: 24px;
   border-radius: 50%;
   border: 2px solid #000000;
   display: flex;
@@ -206,4 +207,22 @@
   background-color: #eeeeee;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.ResultElement {
+  padding: 5px;
+  background-color: #03c04a;
+  color: #ffffff;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.Target {
+  background-color: #cc1100;
+}
+
+.Hide {
+  background-color: #ffffff;
+  color: #000000;
 }
