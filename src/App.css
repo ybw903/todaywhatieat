@@ -136,3 +136,12 @@
   border-radius: 20px;
   cursor: pointer;
 }
+
+.PlayerWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.PlayerElement {
+  padding: 10px;
+}

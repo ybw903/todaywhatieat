@@ -4,6 +4,8 @@ import "../App.css";
 
 const Ladder = ({ callback }: ISelectedScreen) => {
   const [count, setCount] = useState(4);
+  const [ladder, setLadder] = useState<number[][] | null>(null);
+  const [playerIdx, setPlayerIdx] = useState(-1);
   const ref = useRef<HTMLCanvasElement | null>(null);
   const firstScreenButtonClickHandler: React.MouseEventHandler<
     HTMLDivElement
@@ -15,6 +17,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
     evt
   ) => {
     if (count <= 2) return;
+    setPlayerIdx(-1);
     setCount((count) => count - 1);
   };
 
@@ -22,6 +25,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
     evt
   ) => {
     if (count >= 8) return;
+    setPlayerIdx(-1);
     setCount((count) => count + 1);
   };
 
@@ -29,7 +33,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
     if (!ref.current) return;
     const canvas = ref.current;
     const context = canvas.getContext("2d");
-    if (context) {
+    if (context && ladder) {
       const arr = [];
       for (let i = 0; i < count; i++) {
         const startPosX = (i / count) * 300 + ((1 / count) * 300) / 2;
@@ -45,7 +49,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
       for (let i = 1; i <= ladder.length - 2; i += 2) {
         for (let j = 1; j < 10; j++) {
           if (ladder[i][j] === 0) continue;
-          const posY = j * 40;
+          const posY = j * 40 + 20;
           const startPosX = arr[Math.floor(i / 2)];
           const endPosX = arr[Math.floor(i / 2) + 1];
           context.beginPath();
@@ -102,10 +106,89 @@ const Ladder = ({ callback }: ISelectedScreen) => {
     return ladder;
   };
   useEffect(() => {
-    const ladder = initLadder();
-    drawCanvas(ladder);
+    const nowLadder = initLadder();
+    setLadder(nowLadder);
+    drawCanvas(nowLadder);
     return clearCanvas;
   }, [count]);
+
+  const playerColor = [
+    "yellow",
+    "blue",
+    "red",
+    "green",
+    "orange",
+    "navy",
+    "purple",
+    "brown",
+  ];
+  useEffect(() => {
+    if (playerIdx === -1) return;
+    if (!ref.current) return;
+    const canvas = ref.current;
+    const context = canvas.getContext("2d");
+    if (context && playerIdx !== -1 && ladder) {
+      const arr = [];
+      for (let i = 0; i < count; i++) {
+        const startPosX = (i / count) * 300 + ((1 / count) * 300) / 2;
+        arr.push(startPosX);
+      }
+
+      let ladderIdx = playerIdx * 2;
+      let posX = arr[Math.floor(ladderIdx / 2)];
+      let yIdx = 0;
+      let posY = 20;
+      while (posY < 380) {
+        if (
+          ladderIdx < count + (count - 1) - 1 &&
+          ladder[ladderIdx + 1][yIdx] === 1
+        ) {
+          ladderIdx += 2;
+          const nextPosX = arr[Math.floor(ladderIdx / 2)];
+          context.strokeStyle = playerColor[playerIdx];
+          context.lineWidth = 3;
+          context.beginPath();
+          context.moveTo(posX, posY);
+          context.lineTo(nextPosX, posY);
+          context.stroke();
+          posX = nextPosX;
+        } else if (ladderIdx > 0 && ladder[ladderIdx - 1][yIdx] === 1) {
+          ladderIdx -= 2;
+          const nextPosX = arr[Math.floor(ladderIdx / 2)];
+          context.strokeStyle = playerColor[playerIdx];
+          context.lineWidth = 3;
+          context.beginPath();
+          context.moveTo(posX, posY);
+          context.lineTo(nextPosX, posY);
+          context.stroke();
+          posX = nextPosX;
+        }
+        const nextPosY = posY + 40;
+        context.strokeStyle = playerColor[playerIdx];
+        context.lineWidth = 3;
+        context.beginPath();
+        context.moveTo(posX, posY);
+        context.lineTo(posX, nextPosY);
+        context.stroke();
+        posY = nextPosY;
+        yIdx = yIdx + 1;
+      }
+    }
+  }, [playerIdx]);
+
+  const renderPlayer = () => {
+    const players = Array.from({ length: count }, (_, i) => i + 1);
+    return players.map((p, i) => {
+      const onClickHandler = () => {
+        setPlayerIdx(i);
+      };
+      return (
+        <div className="PlayerElement" key={i} onClick={() => onClickHandler()}>
+          {p}
+        </div>
+      );
+    });
+  };
   return (
     <div className="LadderWrapper">
       <div className="CountWrapper">
@@ -123,6 +206,8 @@ const Ladder = ({ callback }: ISelectedScreen) => {
           +
         </div>
       </div>
+      <div className="PlayerWrapper">{renderPlayer()}</div>
+
       <canvas ref={ref} height={400} width={300}></canvas>
       <div className="MoreSelectButton" onClick={firstScreenButtonClickHandler}>
         첨화면 ㄱ
