@@ -465,7 +465,6 @@ function App() {
     <div className="App">
       <Intro />
       <Select />
-      <div className="KakaoBtn">카카오 로그인하기</div>
     </div>
   );
 }
