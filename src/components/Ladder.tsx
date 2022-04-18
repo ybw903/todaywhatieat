@@ -221,7 +221,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
           }`}
           key={i}
         >
-          {r.isShow === false ? "뭘까?" : r.result === true ? "당첨" : "꽁짜"}
+          {r.isShow === false ? "뭘까" : r.result === true ? "당첨" : "꽁짜"}
         </div>
       );
     });
