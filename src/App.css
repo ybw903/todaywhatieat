@@ -135,19 +135,29 @@
 
 .CountElement {
   padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .CountButton {
   background-color: #eeeeee;
   font-weight: 600;
   font-size: 17px;
-  border-radius: 20px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
 }
 
 .PlayerWrapper {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  width: 260px;
 }
 
 .PlayerElement {

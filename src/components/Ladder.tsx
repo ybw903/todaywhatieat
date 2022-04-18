@@ -124,63 +124,64 @@ const Ladder = ({ callback }: ISelectedScreen) => {
   ];
   useEffect(() => {
     if (playerIdx === -1) return;
-    if (!ref.current) return;
+    if (!ref.current || ladder === null) return;
     const canvas = ref.current;
     const context = canvas.getContext("2d");
-    if (context && playerIdx !== -1 && ladder) {
-      const arr: any[] = [];
-      for (let i = 0; i < count; i++) {
-        const startPosX = (i / count) * 300 + ((1 / count) * 300) / 2;
-        arr.push(startPosX);
-      }
+    if (!context || playerIdx === -1) return;
+    clearCanvas();
+    drawCanvas(ladder);
+    const arr: any[] = [];
+    for (let i = 0; i < count; i++) {
+      const startPosX = (i / count) * 300 + ((1 / count) * 300) / 2;
+      arr.push(startPosX);
+    }
 
-      let ladderIdx = playerIdx * 2;
-      let posX = arr[Math.floor(ladderIdx / 2)];
-      let yIdx = 0;
-      let posY = 20;
-      const moveDown = setInterval(() => {
-        if (posY >= 380) {
-          clearInterval(moveDown);
-        } else {
-          if (
-            ladderIdx < count + (count - 1) - 1 &&
-            ladder[ladderIdx + 1][yIdx] === 1
-          ) {
-            ladderIdx += 2;
-            const nextPosX = arr[Math.floor(ladderIdx / 2)];
-            context.strokeStyle = playerColor[playerIdx];
-            context.lineWidth = 3;
-            context.beginPath();
-            context.moveTo(posX, posY);
-            context.lineTo(nextPosX, posY);
-            context.stroke();
-            posX = nextPosX;
-          } else if (ladderIdx > 0 && ladder[ladderIdx - 1][yIdx] === 1) {
-            ladderIdx -= 2;
-            const nextPosX = arr[Math.floor(ladderIdx / 2)];
-            context.strokeStyle = playerColor[playerIdx];
-            context.lineWidth = 3;
-            context.beginPath();
-            context.moveTo(posX, posY);
-            context.lineTo(nextPosX, posY);
-            context.stroke();
-            posX = nextPosX;
-          }
-          const nextPosY = posY + 40;
+    let ladderIdx = playerIdx * 2;
+    let posX = arr[Math.floor(ladderIdx / 2)];
+    let yIdx = 0;
+    let posY = 20;
+    const moveDown = setInterval(() => {
+      if (posY >= 380) {
+        clearInterval(moveDown);
+      } else {
+        if (
+          ladderIdx < count + (count - 1) - 1 &&
+          ladder[ladderIdx + 1][yIdx] === 1
+        ) {
+          ladderIdx += 2;
+          const nextPosX = arr[Math.floor(ladderIdx / 2)];
           context.strokeStyle = playerColor[playerIdx];
           context.lineWidth = 3;
           context.beginPath();
           context.moveTo(posX, posY);
-          context.lineTo(posX, nextPosY);
+          context.lineTo(nextPosX, posY);
           context.stroke();
-          posY = nextPosY;
-          yIdx = yIdx + 1;
+          posX = nextPosX;
+        } else if (ladderIdx > 0 && ladder[ladderIdx - 1][yIdx] === 1) {
+          ladderIdx -= 2;
+          const nextPosX = arr[Math.floor(ladderIdx / 2)];
+          context.strokeStyle = playerColor[playerIdx];
+          context.lineWidth = 3;
+          context.beginPath();
+          context.moveTo(posX, posY);
+          context.lineTo(nextPosX, posY);
+          context.stroke();
+          posX = nextPosX;
         }
-      }, 50);
-      // while (posY < 380) {
-
-      // }
-    }
+        const nextPosY = posY + 40;
+        context.strokeStyle = playerColor[playerIdx];
+        context.lineWidth = 3;
+        context.beginPath();
+        context.moveTo(posX, posY);
+        context.lineTo(posX, nextPosY);
+        context.stroke();
+        posY = nextPosY;
+        yIdx = yIdx + 1;
+      }
+    }, 50);
+    return () => {
+      clearInterval(moveDown);
+    };
   }, [playerIdx]);
 
   const renderPlayer = () => {
@@ -199,18 +200,16 @@ const Ladder = ({ callback }: ISelectedScreen) => {
   return (
     <div className="LadderWrapper">
       <div className="CountWrapper">
-        <div
-          className={["CountElement", "CountButton"].join(" ")}
-          onClick={decreaseClickHandler}
-        >
-          -
+        <div className="CountElement">
+          <div className="CountButton" onClick={decreaseClickHandler}>
+            -
+          </div>
         </div>
         <div className="CountElement">{count}</div>
-        <div
-          className={["CountElement", "CountButton"].join(" ")}
-          onClick={increaseClickHandler}
-        >
-          +
+        <div className="CountElement">
+          <div className="CountButton" onClick={increaseClickHandler}>
+            +
+          </div>
         </div>
       </div>
       <div className="PlayerWrapper">{renderPlayer()}</div>
