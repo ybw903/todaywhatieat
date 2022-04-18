@@ -38,6 +38,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
       for (let i = 0; i < count; i++) {
         const startPosX = (i / count) * 300 + ((1 / count) * 300) / 2;
         arr.push(startPosX);
+        console.log(startPosX);
         context.strokeStyle = "black";
         context.lineWidth = 2;
         context.beginPath();
@@ -135,7 +136,6 @@ const Ladder = ({ callback }: ISelectedScreen) => {
       const startPosX = (i / count) * 300 + ((1 / count) * 300) / 2;
       arr.push(startPosX);
     }
-
     let ladderIdx = playerIdx * 2;
     let posX = arr[Math.floor(ladderIdx / 2)];
     let yIdx = 0;
@@ -212,7 +212,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
           </div>
         </div>
       </div>
-      <div className="PlayerWrapper">{renderPlayer()}</div>
+      <div className={`PlayerWrapper-${count}`}>{renderPlayer()}</div>
 
       <canvas ref={ref} height={400} width={300}></canvas>
       <div className="MoreSelectButton" onClick={firstScreenButtonClickHandler}>
