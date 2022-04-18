@@ -128,7 +128,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
     const canvas = ref.current;
     const context = canvas.getContext("2d");
     if (context && playerIdx !== -1 && ladder) {
-      const arr = [];
+      const arr: any[] = [];
       for (let i = 0; i < count; i++) {
         const startPosX = (i / count) * 300 + ((1 / count) * 300) / 2;
         arr.push(startPosX);
@@ -138,41 +138,48 @@ const Ladder = ({ callback }: ISelectedScreen) => {
       let posX = arr[Math.floor(ladderIdx / 2)];
       let yIdx = 0;
       let posY = 20;
-      while (posY < 380) {
-        if (
-          ladderIdx < count + (count - 1) - 1 &&
-          ladder[ladderIdx + 1][yIdx] === 1
-        ) {
-          ladderIdx += 2;
-          const nextPosX = arr[Math.floor(ladderIdx / 2)];
+      const moveDown = setInterval(() => {
+        if (posY >= 380) {
+          clearInterval(moveDown);
+        } else {
+          if (
+            ladderIdx < count + (count - 1) - 1 &&
+            ladder[ladderIdx + 1][yIdx] === 1
+          ) {
+            ladderIdx += 2;
+            const nextPosX = arr[Math.floor(ladderIdx / 2)];
+            context.strokeStyle = playerColor[playerIdx];
+            context.lineWidth = 3;
+            context.beginPath();
+            context.moveTo(posX, posY);
+            context.lineTo(nextPosX, posY);
+            context.stroke();
+            posX = nextPosX;
+          } else if (ladderIdx > 0 && ladder[ladderIdx - 1][yIdx] === 1) {
+            ladderIdx -= 2;
+            const nextPosX = arr[Math.floor(ladderIdx / 2)];
+            context.strokeStyle = playerColor[playerIdx];
+            context.lineWidth = 3;
+            context.beginPath();
+            context.moveTo(posX, posY);
+            context.lineTo(nextPosX, posY);
+            context.stroke();
+            posX = nextPosX;
+          }
+          const nextPosY = posY + 40;
           context.strokeStyle = playerColor[playerIdx];
           context.lineWidth = 3;
           context.beginPath();
           context.moveTo(posX, posY);
-          context.lineTo(nextPosX, posY);
+          context.lineTo(posX, nextPosY);
           context.stroke();
-          posX = nextPosX;
-        } else if (ladderIdx > 0 && ladder[ladderIdx - 1][yIdx] === 1) {
-          ladderIdx -= 2;
-          const nextPosX = arr[Math.floor(ladderIdx / 2)];
-          context.strokeStyle = playerColor[playerIdx];
-          context.lineWidth = 3;
-          context.beginPath();
-          context.moveTo(posX, posY);
-          context.lineTo(nextPosX, posY);
-          context.stroke();
-          posX = nextPosX;
+          posY = nextPosY;
+          yIdx = yIdx + 1;
         }
-        const nextPosY = posY + 40;
-        context.strokeStyle = playerColor[playerIdx];
-        context.lineWidth = 3;
-        context.beginPath();
-        context.moveTo(posX, posY);
-        context.lineTo(posX, nextPosY);
-        context.stroke();
-        posY = nextPosY;
-        yIdx = yIdx + 1;
-      }
+      }, 50);
+      // while (posY < 380) {
+
+      // }
     }
   }, [playerIdx]);
 
