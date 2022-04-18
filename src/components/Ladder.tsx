@@ -48,15 +48,15 @@ const Ladder = ({ callback }: ISelectedScreen) => {
         context.strokeStyle = "black";
         context.lineWidth = 2;
         context.beginPath();
-        context.moveTo(startPosX, 20);
-        context.lineTo(startPosX, 380);
+        context.moveTo(startPosX, 10);
+        context.lineTo(startPosX, 280);
 
         context.stroke();
       }
       for (let i = 1; i <= ladder.length - 2; i += 2) {
         for (let j = 1; j < 10; j++) {
           if (ladder[i][j] === 0) continue;
-          const posY = j * 40 + 20;
+          const posY = j * 30 + 10;
           const startPosX = arr[Math.floor(i / 2)];
           const endPosX = arr[Math.floor(i / 2) + 1];
           context.beginPath();
@@ -153,9 +153,9 @@ const Ladder = ({ callback }: ISelectedScreen) => {
     let ladderIdx = playerIdx * 2;
     let posX = arr[Math.floor(ladderIdx / 2)];
     let yIdx = 0;
-    let posY = 20;
+    let posY = 10;
     const moveDown = setInterval(() => {
-      if (posY >= 380) {
+      if (posY >= 270) {
         clearInterval(moveDown);
       } else {
         if (
@@ -182,7 +182,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
           context.stroke();
           posX = nextPosX;
         }
-        const nextPosY = posY + 40;
+        const nextPosY = posY + 30;
         context.strokeStyle = playerColor[playerIdx];
         context.lineWidth = 3;
         context.beginPath();
@@ -221,7 +221,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
           }`}
           key={i}
         >
-          {r.isShow === false ? "뭘까" : r.result === true ? "당첨" : "꽁짜"}
+          {r.isShow === false ? "뭘까?" : r.result === true ? "당첨" : "꽁짜"}
         </div>
       );
     });
@@ -244,7 +244,7 @@ const Ladder = ({ callback }: ISelectedScreen) => {
       <div></div>
       <div className={`PlayerWrapper-${count}`}>{renderPlayer()}</div>
 
-      <canvas ref={ref} height={400} width={300}></canvas>
+      <canvas ref={ref} height={300} width={300}></canvas>
       <div className={`PlayerWrapper-${count}`}>{renderResults()}</div>
       <div className="MoreSelectButton" onClick={firstScreenButtonClickHandler}>
         첨화면 ㄱ
