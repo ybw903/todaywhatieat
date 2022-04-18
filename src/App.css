@@ -73,9 +73,16 @@
   font-weight: 700;
 }
 
+@media screen and (min-width: 375px) {
+  .MapWrapper {
+    width: 300px;
+    height: 200px;
+  }
+}
+
 .MapWrapper {
-  width: 300px;
-  height: 200px;
+  width: 400px;
+  height: 300px;
 }
 
 .Map {

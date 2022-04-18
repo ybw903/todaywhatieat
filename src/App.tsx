@@ -219,7 +219,7 @@ const Map = ({ selectedPlace }: { selectedPlace: any }) => {
 
       const options = {
         center: latlng,
-        level: 2,
+        level: 3,
       };
       const map = new (window as any).kakao.maps.Map(mapRef.current, options);
       map.relayout();
