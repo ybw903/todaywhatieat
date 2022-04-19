@@ -453,9 +453,14 @@ const Select = () => {
   };
   return (
     <div className="Select">
-      {isSelected === SelectType.NONE
-        ? selectList()
-        : selectAndSelect({ callback: callbackSelectInit })}
+      {isSelected === SelectType.NONE ? (
+        <div className="FirstSelectScreen">
+          {selectList()}
+          <div className="KakaoBtn">카카오 로그인하기</div>
+        </div>
+      ) : (
+        selectAndSelect({ callback: callbackSelectInit })
+      )}
     </div>
   );
 };
