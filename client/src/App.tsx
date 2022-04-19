@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { ISelectedScreen } from "./@interface";
 import "./App.css";
 import Ladder from "./components/Ladder";
@@ -451,12 +452,17 @@ const Select = () => {
       return <Ladder callback={callbackSelectInit}></Ladder>;
     return <CloseDistanceyList callback={callbackSelectInit} />;
   };
+
+  const REDIRECT_URI = "http://localhost:3000/oauth/kakao/callback";
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   return (
     <div className="Select">
       {isSelected === SelectType.NONE ? (
         <div className="FirstSelectScreen">
           {selectList()}
-          <div className="KakaoBtn">카카오 로그인하기</div>
+          <div className="KakaoBtn">
+            <a href={KAKAO_AUTH_URL}>카카오 로그인하기</a>
+          </div>
         </div>
       ) : (
         selectAndSelect({ callback: callbackSelectInit })
@@ -465,12 +471,27 @@ const Select = () => {
   );
 };
 
-function App() {
+const Main = () => {
   return (
     <div className="App">
       <Intro />
       <Select />
     </div>
+  );
+};
+
+const Auth = () => {
+  const code = new URL(window.location.href).searchParams.get("code");
+  const navigation = useNavigate();
+  return <div>{code}</div>;
+};
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Main />}></Route>
+      <Route path="/oauth/kakao/callback" element={<Auth />}></Route>
+    </Routes>
   );
 }
 
